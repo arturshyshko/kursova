@@ -1,0 +1,10 @@
+{% extends "movies/base.html" %}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static "movies/style.css" %}" />
+
+{% block content %}
+<h1>{{ user.username }}</h1>
+<p>on site since: {{ user.date_joined }}</p>
+<a class="list-link" href="{% url 'userlist' user.username %}">Your film list</a>
+{% endblock %}

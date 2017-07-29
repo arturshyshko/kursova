@@ -1,0 +1,43 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static "movies/style.css" %}" />
+
+{% block content %}
+<h1>{{movie.name}}</h1>
+{% if user.is_authenticated %}
+<form action="/add/{{ movie.pk }}" method="post">
+{% csrf_token %}
+    {% if not movie in user.movies.all %}
+        <input type="submit" name="{{ movie.name }}" value="Add">
+    {% endif %}
+</form>
+{% endif %}
+<hr>
+<p>Countries: {% for country in movie.country.all %}
+    <span>{{country.name}}{% if not forloop.last %},{%endif%} </span>
+{% endfor %}</p>
+<hr>
+<p>Year: {{movie.year}}</p>
+<hr>
+<h2>Director: <span>{{movie.director.name}}</span></h2>
+<hr>
+<p>Genres: {% for genre in movie.genres.all %}
+    <span>{{genre.genre.name}}{% if not forloop.last %},{%endif%} </span>
+{% endfor %}</p>
+<hr>
+<h2>Actors:</h2>
+<ul>
+    {% for actor in movie.actors.all %}
+        <li>{{actor.name}}</li>
+    {% endfor %}
+</ul>
+<pre>{{movie.description}}</pre>
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'rate' movie.pk user.username %}">
+{% csrf_token %}
+{{ form.as_p }}
+    <input type="submit" name="rate {{movie.name}}" value="Rate">
+</form>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'movies/base.html' %}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static "movies/style.css" %}" />
+
+{% block content %}
+<table class="watched-movies-table">
+    <thead>
+        <tr>
+            <th class="table-header-name">
+                <a class="table-link" href="{% url 'userlist' user.username %}">Title</a>
+            </th>
+            <th class="table-header-genre">
+                {{ genre.name }}
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-entries">
+        {% for movie in user.movies.all %}
+            <tr class="table-movie-holder">
+                <td class="table-body-name">
+                   <a class="table-list-link" href="{% url 'movie' movie.pk %}">{{ movie.name }}</a>
+                </td>
+                <td class="table-body-genre">
+                    {{ movie.ratings.position }}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

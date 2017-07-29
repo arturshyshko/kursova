@@ -1,0 +1,24 @@
+{% extends "movies/base.html" %}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static "movies/style.css" %}" />
+
+{% block content %}
+<h1>Authorization</h1>
+<p>You can authorize on this page</p>
+<form action="/login" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="block-input">
+            <label for="{{field.id_for_label}}">{{ field.label }}</label>
+            <br>
+            {{ field }}
+        </div>
+    {% endfor %}
+    <div class="block-button">
+        <input class="button-input" type="submit" name="commit" id="submit_user" value="Enter">
+        <a class="row-link" href="{% url 'register' %}"> Register new account</a>
+    </div>
+</form>
+
+{% endblock %}

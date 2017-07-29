@@ -1,0 +1,50 @@
+{% extends "movies/base.html" %}
+{% load movie_utils %}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static "movies/style.css" %}" />
+
+{% block content %}
+<h1>Movies:</h1>
+<span class="step-links">
+    {% if movies.has_previous %}
+        <a href="?{% url_replace request 'page' movies.previous_page_number %}">previous</a>
+    {% endif %}
+    <span class="current">
+        Page {{ movies.number }} of {{ movies.paginator.num_pages }}
+    </span>
+    {% if movies.has_next %}
+        <a href="?{% url_replace request 'page' movies.next_page_number %}">next</a>
+    {% endif %}
+</span>
+<div class="search-page-container">
+    <div class="movie-list">
+        {% for movie in movies %}
+            <article class="movie-holder">
+                <a class="list-link" href="{% url 'movie' movie.pk %}">
+                    <img class="movie-image" src="{{MEDIA_ROOT}}{{movie.image.url}}">
+                    <span class="list-name">{{ movie.name }}</span>
+                    <span class="list-year">{{ movie.year }}</span>
+                    <div style="clear:both"></div>
+                </a>
+            </article>
+        {% endfor %}
+    </div>
+    <div class="search-bar">
+        <div class="input">
+            <form action="/list" method="get">
+                {% for field in form %}
+                    {{field}}
+                {% endfor %}
+                {% for genre in genres %}
+                    <div>
+                    <label for="{{ genre.name }}">{{ genre.name }}</label>
+                    <input class="search-input" type="checkbox" name="{{ genre.name }}" id="{{ genre.name }}">
+                    </div>
+                {% endfor %}
+            <input type="submit" name="filmSearch" value="Search">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
